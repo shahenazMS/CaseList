@@ -1,0 +1,53 @@
+
+import React from 'react';
+import Button from 'terra-button';
+import Radio from 'terra-form-radio/lib/Radio';
+import Input from 'terra-form-input';
+import PropTypes from 'prop-types';
+
+class SearchPanel extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = { name: '', case: '' };
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleCaseChange = this.handleCaseChange.bind(this);
+  }
+
+  handleNameChange(event) {
+    this.setState({ name: event.target.value });
+  }
+  handleCaseChange(event) {
+    this.setState({ case: event.target.value });
+  }
+  render() {
+    const buttonStyle = { margin: '5px', left: '300px'};
+    const textStyle = { width: '200px'};
+  	return(
+  		<div>
+        <Radio id="opname" labelText="Name" name="multiple-group" defaultChecked />
+        <Input name="txtname"
+               value={this.state.name}
+               style={textStyle}
+               onChange={this.handleNameChange} />
+        <Radio id="opcase" labelText="Case" name="multiple-group" />
+        <Input name="txtname"
+               value={this.state.case}
+               style={textStyle}
+               onChange={this.handleCaseChange} />
+
+        <Button id="cmdSearch" text="Search" variant="emphasis" style={buttonStyle} />
+       <p>
+        Input Provided:{this.state.name} 
+        </p>
+      </div>
+  		);
+  }
+}
+        <p>
+          {this.state.name}
+          {this.state.case}
+        </p>
+
+export default SearchPanel;
+

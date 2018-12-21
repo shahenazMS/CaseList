@@ -1,0 +1,5 @@
+{
+  "training-js/training": {
+    "dependencies": ["./training-js/lib/training/registration"]
+  }
+}
