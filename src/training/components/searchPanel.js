@@ -1,4 +1,3 @@
-
 import React from 'react';
 import Button from 'terra-button';
 import Radio from 'terra-form-radio/lib/Radio';
@@ -35,11 +34,20 @@ class SearchPanel extends React.Component {
   }
   handleSearchClick(event){
     if(!this.state.nameDisable && this.state.name.length==0)
+    {
       this.setState({message :'Enter patient name to search'});
+      return;
+    }
     else if(!this.state.caseDisable && this.state.case.length==0)
+    {
       this.setState({message :'Enter case to search'});
+      return;
+    }
     else
+    {
       this.setState({message :''});
+    }
+    this.props.handleClick();
   }
   render() {
     const divRelStyle = {position:'relative', width:'90%', marginLeft:'20px'};

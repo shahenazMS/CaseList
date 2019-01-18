@@ -3,7 +3,7 @@ import {
   LOAD_TRAINING_SUCCEEDED,
   LOAD_TRAINING_FAILED,
 } from './actions';
-
+ 
 const trainingReducers = (state = {
   isFailed: false,
   isLoading: true,

@@ -7,7 +7,7 @@ import App from './components/app';
 
 export default (
     <Route exact path="/" component={App}>
-      <Route path="/home" component={HomePage} />
+      <IndexRoute component={HomePage} />
       <Route path="/about" component={AboutPage} />
     </Route>
 );

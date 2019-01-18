@@ -1,29 +1,49 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Header from 'terra-clinical-header';
 import ContentContainer from 'terra-content-container';
 import SearchPanel from './searchPanel';
 import SearchList from './searchList';
-import CaseApi from '../api/mockCaseApi';
+import { connect } from 'react-redux';
+import * as CaseAction from '../actions';
 
 class HomePage extends React.Component {
   constructor(props) {
       super(props);
-      this.state = {cases:[]};
-      //this.handleSearchClick = th                      is.handleSearchClick.bind(this);
+    /*  this.state = {cases:[]};*/
+      this.handleSearch = this.handleSearch.bind(this);
     }
     componentDidMount() {
-      this.setState({cases: CaseApi.getAllCases()});
+
+    }
+    handleSearch(event) {
+      this.props.loadCases();
     }
     render() {
-    	return(
+      return(
     		<div>
-          <SearchPanel />
+          <SearchPanel handleClick={this.handleSearch}/>
           <br/>
-          <SearchList cases={this.state.cases}/>
+          <SearchList cases={this.props.cases} />
     		</div>
     		);
     }
   }
 
+  HomePage.propTypes = {
+    cases: PropTypes.array.isRequired,
+    loadCases: PropTypes.func.isRequired
+  };
 
-export default HomePage;
+  function mapStateToProps (state,ownProps){
+    return {
+      cases:state.cases
+    };
+  }
+  const mapDispatchToProps = (dispatch) => ({
+      loadCases: ()=> dispatch(CaseAction.loadCases())
+      //loadCases: bindActionCreators(CaseAction.loadCases(),dispatch)
+      //import bindActionCreators from 'redux'
+  });
+
+export default connect(mapStateToProps,mapDispatchToProps)(HomePage);

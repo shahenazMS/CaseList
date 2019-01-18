@@ -26,13 +26,15 @@ const cases = [
 
 class CaseApi{
   static getAllCases(){
-    return JSON.parse(JSON.stringify(cases));
-  /*  new Promise((resolve,reject) => {
+    return Object.assign([],cases);
+  /*  return JSON.parse(JSON.stringify(cases));*/
+   /*return new Promise((resolve,reject) => {
       setTimeout(() => {
-        resolve(JSON.parse(JSON.stringify(cases)));
+        resolve(Object.assign([],cases));
       }, delay);
     });*/
   }
 }
+
 
 export default CaseApi;

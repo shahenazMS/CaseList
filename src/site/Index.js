@@ -4,9 +4,15 @@ import ReactDOM from 'react-dom';
 import App from '../training/components/app';
 import { Router, browserHistory} from 'react-router';
 import routes from '../training/routes';
+import { Provider } from 'react-redux';
+import configureStore from '../training/configureStore'
+
+const store = configureStore();
 
 ReactDOM.render(
-   <Router history={browserHistory} routes={routes}/>,
+   <Provider store={store}>
+     <Router history={browserHistory} routes={routes}/>
+   </Provider>,
    document.getElementById('app')
 );
 /*import NoDataTestRoutes from '../../tests/wdio/TrainingView-NoData-TestRoutes';
