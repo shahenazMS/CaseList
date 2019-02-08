@@ -6,7 +6,7 @@ import { Router, browserHistory} from 'react-router';
 import routes from '../training/routes';
 import { Provider } from 'react-redux';
 import configureStore from '../training/configureStore'
-
+import '../styles/style.css'
 const store = configureStore();
 
 ReactDOM.render(

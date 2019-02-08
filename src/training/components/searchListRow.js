@@ -2,6 +2,7 @@ import React from 'react';
 import Table from 'terra-table/lib/Table';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router';
+import Button from 'terra-button';
 
 const CustomCell = props => (
 <div>
@@ -16,10 +17,12 @@ const CustomCell = props => (
 CustomCell.propTypes = {
   specimens: PropTypes.array
 };
+
 const CommentCell = props => (
 <div>
-  {props.commentId>0?(
-  <Link to='about'>View</Link>):null}
+  {props.commentId>0?
+    (<Button text='..' data-comment={props.comment} onClick={props.handleOpenModal}/>)
+    :null}
 </div>
 );
 
@@ -27,12 +30,16 @@ CommentCell.propTypes = {
   commentId: PropTypes.number
 };
 
-const SearchListRow = ({selCase}) => {
+const SearchListRow = ({selCase,handleOpenModal}) => {
 
   return(
     <Table.Row key={selCase.caseId} style={{textDecorationLine: selCase.cancelCd>0? 'line-through':'none'}}>
       <Table.Cell content={selCase.accessionNbr} key="CASE" />
-      <Table.Cell content={<CommentCell commentId={selCase.caseCommentId} />} key="COMMENT" style={{textAlign:'center'}} />
+      <Table.Cell content={<CommentCell
+          commentId={selCase.caseCommentId}
+          comment={selCase.caseComment}
+          handleOpenModal={handleOpenModal}/>
+          }   key="COMMENT" style={{textAlign:'center'}} />
       <Table.Cell content={selCase.persnName} key="NAME"/>
       <Table.Cell content={<CustomCell specimens={selCase.specimens}/>} key="SPECIMEN" />
       <Table.Cell content={selCase.caseCollected} key="COLLECTED" />
