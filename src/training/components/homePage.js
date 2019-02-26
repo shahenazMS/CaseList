@@ -7,24 +7,15 @@ import SearchList from './searchList';
 import { connect } from 'react-redux';
 import * as CaseAction from '../actions';
 import AdvSearchPanel from './advSearchPanel'
+import {AppContext} from './appContext';
 
 class HomePage extends React.Component {
   constructor(props) {
       super(props);
       this.state = {
-        params:{
-          name: '',
-          case: '',
-          pathologistId:0,
-          residentId:0,
-          prefixId: 0,
-          prefixGrpId: 0,
-          outsideCase:''},
           isOpen: false,
           display:'Show More'
       };
-      this.handleSearch = this.handleSearch.bind(this);
-      this.handleFilterChange = this.handleFilterChange.bind(this);
       this.toggleShowHide = this.toggleShowHide.bind(this);
     }
     toggleShowHide() {
@@ -33,107 +24,89 @@ class HomePage extends React.Component {
         display:prevState.isOpen?'Show More':'Hide'
       }));
     }
-  handleFilterChange(event){
-    var field;
-    switch(event.target.name){
-      case 'txtname':
-        field='name';
-        break;
-      case 'txtcase':
-        field='case';
-        break;
-      case 'txtoutsidecase':
-        field='outsideCase';
-        break;
-      case 'prefix':
-        field='prefixId';
-        break;
-      case 'prefixgroup':
-        field='prefixGrpId';
-        break;
-      case 'pathologist':
-        field='pathologistId';
-        break;
-      case 'resident':
-        field='residentId';
-        break;
-      case 'multiple-group':
-        if(event.target.id=='opname')
-          field='case';
-        else
-          field='name';
-        break;
-      default:
-        field='';
-    }
-    if (field.length>0){
-      let newParam = Object.assign({},this.state.params);
-      newParam[field] = event.target.value;
-      this.setState({params:newParam});
-    }
-  }
 
   componentDidMount() {
+    if(this.props.prefixes=='undefined' || this.props.prefixes.length==0)
+    {
+      this.props.loadPrefixes();
+    }
+    if(this.props.prefixGrps=='undefined' || this.props.prefixGrps.length==0)
+    {
+      this.props.loadPrefixGrps();
+    }
+    if(this.props.pathologists=='undefined' || this.props.pathologists.length==0)
+    {
+      this.props.loadPathologists();
+    }
+    if(this.props.residents=='undefined' || this.props.residents.length==0)
+    {
+      this.props.loadResidents();
+    }
+  }
 
-  }
-  handleSearch(event) {
-    this.props.loadCases(this.state.params);
-  }
   render() {
-    const prefixes = [
-      {value:1,text:" G"},
-      {value:2,text:"JP"},
-      {value:3,text:"SP"}];
-    const prefixGrps = [
-      {value:11,text:"G"},
-      {value:12,text:"S"},
-      {value:13,text:"P"}];
-    const pathologist=[
-      {value:21,text:"Kiran Vankadaru"},
-      {value:22,text:"Raghvendra Mirajkar"},
-      {value:23,text:"Archana Narasimha"}]
-    const resident=[
-      {value:31,text:"Adarsh Varadaraju"},
-      {value:32,text:"Martin Slimmer"},
-      {value:33,text:"Paul Sommer"}]
-
     return(
+     <AppContext.Consumer>
+       {({params,onChange})=>(
   		<div>
         <SearchPanel
-          handleClick={this.handleSearch}
-          handleChange={this.handleFilterChange}
+          loadCases={this.props.loadCases}
+          handleChange={onChange}
           toggleShowHide={this.toggleShowHide}
-          name={this.state.params.name}
-          case={this.state.params.case}
+          params={params}
           display={this.state.display}
         />
         {this.state.isOpen?
           (<AdvSearchPanel
-            handleFilterChange={this.handleFilterChange}
-            prefixes={prefixes}
-            prefixGrps={prefixGrps}
-            pathologist={pathologist}
-            resident={resident}
-            params={this.state.params}/>)
+            handleFilterChange={onChange}
+            prefixes={this.props.prefixes}
+            prefixGrps={this.props.prefixGrps}
+            pathologist={this.props.pathologists}
+            resident={this.props.residents}
+            params={params}/>)
               :null}
-      <SearchList cases={this.props.cases} />
-  		</div>
-  		);
+        <label>{params.name}</label>
+        <label>{params.case}</label>
+        <label>{params.prefixId}</label>
+        <label>{params.prefixGrpId}</label>
+        <label>{params.pathologistId}</label>
+        <label>{params.residentId}</label>
+        <label>{params.outsideCase}</label>
+        <SearchList cases={this.props.cases} />
+  		</div>)}
+    </AppContext.Consumer>
+	 );
   }
 }
 
   HomePage.propTypes = {
     cases: PropTypes.array.isRequired,
-    loadCases: PropTypes.func.isRequired
+    prefixes:PropTypes.array.isRequired,
+    prefixGrps:PropTypes.array.isRequired,
+    pathologists:PropTypes.array.isRequired,
+    residents:PropTypes.array.isRequired,
+    loadCases: PropTypes.func.isRequired,
+    loadPrefixes: PropTypes.func.isRequired,
+    loadPrefixGrps: PropTypes.func.isRequired,
+    loadPathologists: PropTypes.func.isRequired,
+    loadResidents: PropTypes.func.isRequired
   };
 
   function mapStateToProps (state,ownProps){
     return {
-      cases:state.cases
+      cases:state.cases,
+      prefixes:state.prefixReducer,
+      prefixGrps:state.groupReducer,
+      pathologists:state.pathReducer,
+      residents:state.resiReducer
     };
   }
   const mapDispatchToProps = (dispatch) => ({
-      loadCases: (params)=> dispatch(CaseAction.loadCases(params))
+      loadCases: (params)=> dispatch(CaseAction.loadCases(params)),
+      loadPrefixes: ()=> dispatch(CaseAction.loadPrefixes()),
+      loadPrefixGrps: ()=> dispatch(CaseAction.loadPrefixGrps()),
+      loadPathologists: ()=> dispatch(CaseAction.loadPathologists()),
+      loadResidents: ()=> dispatch(CaseAction.loadResidents())
       //loadCases: bindActionCreators(CaseAction.loadCases(),dispatch)
       //import bindActionCreators from 'redux'
   });

@@ -1,6 +1,6 @@
 import {
   LOAD_CASES
-} from './actions';
+} from './actionTypes';
 
 export default function caseReducer(state = [],action){
   switch(action.type){

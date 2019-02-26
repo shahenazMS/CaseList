@@ -34,12 +34,12 @@ class SearchPanel extends React.Component {
 
   }
   handleSearchClick(event){
-    if(!this.state.nameDisable && this.props.name.length==0)
+    if(!this.state.nameDisable && this.props.params.name.length==0)
     {
       this.setState({message :'Enter patient name to search'});
       return;
     }
-    else if(this.state.nameDisable && this.props.case.length==0)
+    else if(this.state.nameDisable && this.props.params.case.length==0)
     {
       this.setState({message :'Enter case to search'});
       return;
@@ -48,7 +48,8 @@ class SearchPanel extends React.Component {
     {
       this.setState({message :''});
     }
-    this.props.handleClick();
+  //  this.props.handleClick();
+  this.props.loadCases(this.props.params);
   }
   render() {
     return(
@@ -59,7 +60,7 @@ class SearchPanel extends React.Component {
                  defaultChecked
                  onChange={this.handleOptionChange} />
             <Input name="txtname"
-                 value={this.props.name}
+                 value={this.props.params.name}
                  disabled={this.state.nameDisable}
                  className="txtStyle"
                  onChange={this.props.handleChange} />
@@ -71,7 +72,7 @@ class SearchPanel extends React.Component {
             <Radio id="opcase" labelText="Case:" name="multiple-group"
                  onChange={this.handleOptionChange} />
                <Input name="txtcase"
-                 value={this.props.case}
+                 value={this.props.params.case}
                  className="txtStyle"
                  disabled={!this.state.nameDisable}
                  onChange={this.props.handleChange} />
